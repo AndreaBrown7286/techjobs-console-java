@@ -7,9 +7,9 @@ import org.apache.commons.csv.CSVRecord;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.Reader;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
+
+import static com.sun.jmx.snmp.ThreadContext.contains;
 
 /**
  * Created by LaunchCode
@@ -71,18 +71,42 @@ public class JobData {
         loadData();
 
         ArrayList<HashMap<String, String>> jobs = new ArrayList<>();
-
         for (HashMap<String, String> row : allJobs) {
 
             String aValue = row.get(column);
+            String loweraValue = aValue.toLowerCase();
 
-            if (aValue.contains(value)) {
+            if (loweraValue.contains(value)) {
                 jobs.add(row);
             }
         }
-
+        Collection<HashMap<String,String>> test= jobs;
         return jobs;
     }
+    /**search that looks for the search term string in all of the columns-values
+     * You should not write code that calls findByColumnAndValue once for each column.
+     *  Rather, utilize loops and collection methods as you did above
+     * @param searchTerm
+     */
+    public static ArrayList<HashMap<String, String>> findByValue(String searchTerm) {
+
+        loadData();
+
+        ArrayList<HashMap<String, String>> jobs = new ArrayList<>();
+        for (HashMap<String, String> job: allJobs) {
+            for (String key : job.keySet()) {
+                String aValue = job.get(key);
+                String loweraValue = aValue.toLowerCase();
+                if (loweraValue.contains(searchTerm)) {
+                    jobs.add(job);
+                }
+            }
+        }
+            //ArrayList<HashMap<String, String>>test = jobs;
+        return jobs;
+    }
+
+
 
     /**
      * Read in data from a CSV file and store it in a list
@@ -125,4 +149,7 @@ public class JobData {
         }
     }
 
+
 }
+
+
